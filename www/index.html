@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="font-src *; connect-src *; default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src * 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="font-src *; default-src * 'unsafe-inline' gap:; style-src * 'unsafe-inline'; media-src *" /> -->
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/framework7.material.colors.min.css">
+    <link rel="stylesheet" type="text/css" href="css/framework7.material.min.css">
+    <link rel="stylesheet" type="text/css" href="css/framework7.material.rtl.min.css">                
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">            
+        <title>Hello World</title>
+</head>
+
+<body>
+    <div class="views">
+        <div class="view view-main">
+            <div class="pages navbar-fixed">
+                <div data-page="index" class="page">
+                    <div class="navbar theme-blue">
+                        <div class="navbar-inner">
+                            <div class="title-center">طقس حسوب </div>
+                        </div>
+                    </div>
+                    <div class="toolbar toolbar-bottom bg-blue">
+                        <div class="toolbar-inner">
+                                <a href="world.html" class="link">طقس العالم</a>
+                                <a href="index.html" class="link">الطقس عندك</a>
+                                <a href="settings.html" class="link">الإعدادات</a>
+                                <a href="about.html" class="link">عن التطبيق</a>     
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search popup-->
+    <div class="popup">
+        <div class="view">
+            <div class="pages">
+                <div class="page navbar-fixed">
+                    <div class="navbar">
+                        <div class="navbar-inner">
+                            <form class="searchbar">
+                                <div class="searchbar-input">
+                                    <input id="city-search" type="search" placeholder="Search">
+                                    <a href="#" class="searchbar-clear"></a>
+                                    <div class="preloader preloader-white"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="page-content">
+                        <div class="list-block">
+                            <ul class="search-results"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script id="search-results-template" type="text/template">
+        {{#each this}}
+            {{#if admin1}}{{#if admin1.content}}
+                <li data-woeid="{{woeid}}" data-city="{{name}}" data-country="{{country.content}}" class="close-popup">
+                    <a href="#" class="item-content item-link">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                {{name}} <span>{{admin1.content}}, {{country.content}}</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            {{/if}}{{/if}}     
+        {{/each}}     
+    </script>
+
+    <!-- world details -->
+    <script id="world-details-template" type="text/template">
+        <div data-page="detail" data-woeid="{{woeid}}" class="page">
+            <div class="navbar theme-blue">
+                <div class="navbar-inner">
+                    <div class="left"><a href="index.html" class="back link icon-only"><i class="icon icon-back"></i></a></div>
+                    <div class="left">{{city}}</div>
+                </div>
+            </div>
+            <div class="page-content">
+                <div class="detail-page-header" style="background-image: url('img/app-logo.png');">
+                    <div class="detail-page-header-overlay"></div>
+                    <div class="detail-temp">{{condition.temp}}&deg;</div>
+                    <div class="detail-condition">{{condition.text}}</div>
+                </div>               
+                <div class="list-block forecast-list">
+                    <ul>{{#each forecast}}
+                        <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <div class="day">{{dayOfWeek date}}</div>
+                                <div class="date">{{formatedDate date}}</div>
+                            </div>
+                            <div class="item-after"> 
+                                <div class="state">{{text}}</div>
+                                <div class="temps"><span class="high">{{high}}&deg;</span><span class="low">{{low}}&deg;</span></div>
+                            </div>
+                        </div>
+                        </li>{{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="home-items-template" type="text/template">
+        {{#each this}}
+            <li data-woeid="{{woeid}}" class="swipeout">
+                <div class="swipeout-content">
+                    <a href="#" data-woeid="{{woeid}}" class="item-content item-link">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                    <div class="city">{{city}}</div>
+                                    <div class="country">{{country}}</div>
+                            </div>
+                            <div class="item-after">{{condition.temp}}&deg;</div>
+                        </div>         
+                    </a>             
+                </div>
+                <div class="swipeout-actions-right">
+                    <a href="#" class="swipeout-delete"><i class="icon icon-delete"></i></a>
+                </div>                          
+            </li> 
+        {{else}}
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">لم تقم بإضافة أي مكان بعد، أضف الآن!</div>
+                </div>
+            </li>     
+        {{/each}}     
+    </script>    
+    <script type="text/template" id="details-template">           
+        <div data-page="location" class="page">            
+            {{#if this}}
+                <div class="navbar theme-blue">
+                    <div class="navbar-inner">
+                        <div class="title-center">{{timezone}}</div>                    
+                    </div>
+                </div>
+                <div class="toolbar toolbar-bottom bg-blue">
+                    <div class="toolbar-inner">                
+                        <a href="world.html" class="link no-animation">طقس العالم</a>         
+                        <a href="index.html" class="link no-animation">الطقس عندك</a>
+                        <a href="settings.html" class="link no-animation">الإعدادات</a>       
+                        <a href="about.html" class="link no-animation">عن التطبيق</a>                   
+                    </div>
+                </div>
+                <div class="page-content hide-bars-on-scroll">
+                        <div class="detail-page-header" style="background-image: url('img/wallpapers/{{currently.icon}}.jpg');">
+                            <div class="detail-temp">{{formatedTemp currently.temperature}}&deg;</div>
+                            <div class="detail-condition">{{currently.summary}}</div>                                             
+                        </div>
+                        <div class="list-block forecast-list">
+                            <ul>{{#each daily.data}}
+                                    <li class="item-content">
+                                        <div class="item-media">
+                                            <img src="img/icons/{{icon}}.png"></img>                                        
+                                        </div>
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                <div class="day">{{dayOfWeek time*1000}}</div>
+                                                <div class="state">{{summary}}</div>
+                                            </div>
+                                            <div class="item-after">
+                                                <div class="date">{{formatedDate time*1000}}</div>
+                                                <div class="temps">
+                                                    <span class="high">{{formatedTemp temperatureHigh}}&deg;</span><span class="low">{{formatedTemp temperatureLow}}&deg;</span>
+                                                </div>                                     
+                                            </div>                                     
+                                        </div>                                                                     
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </div>                                                            
+                </div>  
+            {{else}}
+                <div class="navbar theme-blue">
+                    <div class="navbar-inner">
+                        <div class="center">!هنالك مشكلة </div>
+                    </div>
+                 </div>                       
+                 <div class="toolbar toolbar-bottom bg-blue">
+                        <div class="toolbar-inner">                
+                                <a href="world.html" class="link no-animation">طقس العالم</a>         
+                                <a href="index.html" class="link no-animation">الطقس عندك</a>
+                                <a href="settings.html" class="link no-animation">الإعدادات</a>            
+                                <a href="about.html" class="link no-animation">عن التطبيق</a>  
+                        </div>                                         
+                 </div>
+                 <div class="page-content center-content">
+                    <img src="img/app-logo.png">
+                    <div>لا يمكن عرض معلومات الطقس في منطقتك</div>
+                    <div>يرجى التحقق من صلاحيات الوصول للمكان وحالة الشبكة</div>     
+                    <button class="button button-raised button-fill color-blue center-content" id="refresh">إعادة التحميل</button>
+                </div>                                                                  
+            {{/if}}                                 
+        </div>        
+    </script>
+    
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="js/framework7.min.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
+
+<script>

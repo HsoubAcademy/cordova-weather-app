@@ -1,0 +1,71 @@
+<div class="pages toolbar-fixed navbar-fixed">
+    <div data-page="settings" class="page">
+        <div class="navbar theme-blue">
+            <div class="navbar-inner">
+                <div class="center">الإعدادات</div>
+            </div>
+        </div>
+        <div class="toolbar toolbar-bottom bg-blue">
+            <div class="toolbar-inner">
+                <a href="world.html" class="link no-animation">طقس العالم</a>
+                <a href="index.html" class="link no-animation">الطقس عندك</a>
+                <a href="settings.html" class="link no-animation">الإعدادات</a>
+                <a href="about.html" class="link no-animation">عن التطبيق</a>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="list-block">
+                <div class="content-block-title">الوحدات</div>
+                <div class="content-block">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">وحدة درجة الحرارة</div>
+                            <div class="item-input">
+                                <input type="text" placeholder="الوحدة" readonly id="picker-unit"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-block-title">الموقع الجغرافي</div>
+                <div class="content-block">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">خط العرض</div>
+                                    <div class="item-input">
+                                        <input type="text" name='latitude' placeholder="لم يتم تحديدها" id="lat">
+                                    </div>     
+                                </div>
+                            </div>
+                        </li>                            
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">خط الطول</div>
+                                    <div class="item-input">
+                                        <input type="text" name='longitude' placeholder="لم يتم تحديدها" id="long">
+                                    </div>     
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                        <a href="#" id="save-loc" class="location button button-raised button-fill color-blue">حفظ الموقع الجغرافي</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                        <a href="#" id="update-loc" class="location button button-raised button-fill color-blue">تحديث الموقع الجغرافي</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>                 
+            </div>
+        </div>
+    </div>
+</div>
